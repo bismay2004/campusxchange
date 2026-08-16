@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= title %> — CampusXchange</title>
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="/css/style.css" rel="stylesheet">
+</head>
+<body class="bg-light">
+<%- include('partials/navbar') %>
+<%- include('partials/flash') %>
+<div class="container py-4">
+  <h4 class="fw-bold mb-1">Received Inquiries</h4>
+  <p class="text-muted mb-4">Messages from buyers interested in your listings</p>
+  <% if (inquiries.length === 0) { %>
+    <div class="text-center py-5">
+      <i class="bi bi-envelope fs-1 text-muted d-block mb-3"></i>
+      <h5>No inquiries yet</h5>
+      <p class="text-muted">When buyers contact you, messages will appear here.</p>
+    </div>
+  <% } else { %>
+    <div class="d-flex flex-column gap-3">
+      <% inquiries.forEach(inq => { %>
+        <div class="card border-0 shadow-sm rounded-4 <%= inq.status === 'unread' ? 'border-start border-primary border-3' : '' %>">
+          <div class="card-body p-4">
+            <div class="d-flex justify-content-between align-items-start flex-wrap gap-2 mb-3">
+              <div class="d-flex align-items-center gap-3">
+                <div class="avatar-sm bg-primary text-white rounded-circle fw-bold d-flex align-items-center justify-content-center">
+                  <%= inq.buyer ? inq.buyer.name.charAt(0).toUpperCase() : '?' %>
+                </div>
+                <div>
+                  <div class="fw-bold"><%= inq.buyer ? inq.buyer.name : 'Unknown' %></div>
+                  <div class="text-muted small"><%= inq.buyer ? `${inq.buyer.branch} · Batch ${inq.buyer.batch}` : '' %></div>
+                </div>
+              </div>
+              <div class="text-end">
+                <% if (inq.status === 'unread') { %>
+                  <span class="badge bg-primary mb-1">New</span>
+                <% } else { %>
+                  <span class="badge bg-secondary mb-1">Read</span>
+                <% } %>
+                <div class="text-muted small"><%= formatDate(inq.createdAt) %></div>
+              </div>
+            </div>
+            <% if (inq.listing) { %>
+              <p class="small text-muted mb-2">
+                <i class="bi bi-tag me-1"></i>Re: <a href="/listings/<%= inq.listing._id %>" class="text-decoration-none"><%= inq.listing.title %></a>
+                &nbsp;·&nbsp; <%= formatPrice(inq.listing.price) %>
+              </p>
+            <% } %>
+            <div class="bg-light rounded-3 p-3 mb-3">
+              <p class="mb-0"><%= inq.message %></p>
+            </div>
+            <% if (inq.status === 'unread') { %>
+              <form action="/inquiries/<%= inq._id %>/read" method="POST" class="d-inline">
+                <button type="submit" class="btn btn-outline-primary btn-sm">
+                  <i class="bi bi-check me-1"></i>Mark as Read
+                </button>
+              </form>
+            <% } %>
+
+            <% if (inq.response === 'pending') { %>
+              <form action="/inquiries/<%= inq._id %>/accept" method="POST" class="d-inline">
+                <button type="submit" class="btn btn-success btn-sm">
+                  <i class="bi bi-hand-thumbs-up me-1"></i>Accept
+                </button>
+              </form>
+              <form action="/inquiries/<%= inq._id %>/reject" method="POST" class="d-inline ms-1">
+                <button type="submit" class="btn btn-outline-danger btn-sm">
+                  <i class="bi bi-hand-thumbs-down me-1"></i>Reject
+                </button>
+              </form>
+            <% } else if (inq.response === 'accepted') { %>
+              <span class="badge bg-success ms-2">Accepted</span>
+            <% } else if (inq.response === 'rejected') { %>
+              <span class="badge bg-secondary ms-2">Rejected</span>
+            <% } %>
+          </div>
+        </div>
+      <% }) %>
+    </div>
+  <% } %>
+</div>
+<%- include('partials/footer') %>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script src="/js/main.js"></script>
+</body>
+</html>

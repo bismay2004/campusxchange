@@ -1,0 +1,31 @@
+<footer class="bg-dark text-white pt-5 pb-3 mt-5">
+  <div class="container">
+    <div class="row g-4 mb-4">
+      <div class="col-md-4">
+        <h5 class="fw-bold mb-3"><i class="bi bi-shop-window me-2"></i>CampusXchange</h5>
+        <p class="text-white-50 small">The peer-to-peer marketplace built for college students. Buy, sell, and exchange items within your campus community.</p>
+      </div>
+      <div class="col-md-4">
+        <h6 class="fw-semibold mb-3">Quick Links</h6>
+        <ul class="list-unstyled small">
+          <li class="mb-1"><a href="/" class="text-white-50 text-decoration-none hover-white">Home</a></li>
+          <li class="mb-1"><a href="/listings" class="text-white-50 text-decoration-none">Marketplace</a></li>
+          <li class="mb-1"><a href="/listings/new" class="text-white-50 text-decoration-none">Post a Listing</a></li>
+          <li class="mb-1"><a href="/signup" class="text-white-50 text-decoration-none">Create Account</a></li>
+        </ul>
+      </div>
+      <div class="col-md-4">
+        <h6 class="fw-semibold mb-3">Categories</h6>
+        <div class="d-flex flex-wrap gap-2">
+          <% ["Books","Electronics","Calculators","Hostel","Cycles","Accessories"].forEach(cat => { %>
+            <a href="/listings?category=<%= cat %>" class="badge bg-secondary text-decoration-none"><%= cat %></a>
+          <% }) %>
+        </div>
+      </div>
+    </div>
+    <hr class="border-secondary">
+    <p class="text-center text-white-50 small mb-0">
+      © <%= new Date().getFullYear() %> CampusXchange. Built with Node.js, Express & MongoDB.
+    </p>
+  </div>
+</footer>

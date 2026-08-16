@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= title %> — CampusXchange</title>
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+  <link href="/css/style.css" rel="stylesheet">
+</head>
+<body class="bg-light">
+<%- include('partials/navbar') %>
+<%- include('partials/flash') %>
+<div class="container py-4">
+  <h4 class="fw-bold mb-1">My Inquiries</h4>
+  <p class="text-muted mb-4">Messages you've sent to sellers</p>
+
+  <% if (inquiries.length === 0) { %>
+    <div class="text-center py-5">
+      <i class="bi bi-envelope fs-1 text-muted d-block mb-3"></i>
+      <h5>No inquiries sent</h5>
+      <p class="text-muted">When you contact sellers, messages will appear here.</p>
+      <a href="/listings" class="btn btn-primary">Browse Marketplace</a>
+    </div>
+  <% } else { %>
+    <div class="d-flex flex-column gap-3">
+      <% inquiries.forEach(inq => { %>
+        <div class="card border-0 shadow-sm rounded-4">
+          <div class="card-body p-4">
+            <div class="d-flex justify-content-between align-items-start mb-3">
+              <div>
+                <div class="fw-bold"><%= inq.listing ? inq.listing.title : 'Listing removed' %></div>
+                <div class="text-muted small">to <%= inq.seller ? inq.seller.name : 'Seller' %> • <%= formatDate(inq.createdAt) %></div>
+              </div>
+              <div class="text-end">
+                <% if (inq.response === 'pending') { %>
+                  <span class="badge bg-warning">Waiting</span>
+                <% } else if (inq.response === 'accepted') { %>
+                  <span class="badge bg-success">Accepted</span>
+                <% } else if (inq.response === 'rejected') { %>
+                  <span class="badge bg-secondary">Rejected</span>
+                <% } %>
+              </div>
+            </div>
+
+            <div class="bg-light rounded-3 p-3 mb-3">
+              <p class="mb-0"><%= inq.message %></p>
+            </div>
+
+            <% if (inq.response === 'accepted') { %>
+              <div class="p-3 bg-success bg-opacity-10 rounded-3">
+                <div class="fw-semibold mb-1">Seller accepted your inquiry</div>
+                <div class="small">Contact the seller via email: <a href="mailto:<%= inq.seller.email %>"><%= inq.seller.email %></a></div>
+              </div>
+            <% } %>
+
+          </div>
+        </div>
+      <% }) %>
+    </div>
+  <% } %>
+</div>
+<%- include('partials/footer') %>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script src="/js/main.js"></script>
+</body>
+</html>

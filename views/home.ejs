@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= title %></title>
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="/css/style.css" rel="stylesheet">
+</head>
+<body>
+<%- include('partials/navbar') %>
+<%- include('partials/flash') %>
+
+<!-- HERO -->
+<section class="hero-section py-5">
+  <div class="container py-4">
+    <div class="row align-items-center g-5">
+      <div class="col-lg-6">
+        <span class="badge bg-primary-subtle text-primary fw-semibold px-3 py-2 rounded-pill mb-3 d-inline-block">
+          🎓 Student Marketplace
+        </span>
+        <h1 class="display-4 fw-bold mb-3">Buy &amp; Sell<br><span class="text-primary">Within Your Campus</span></h1>
+        <p class="lead text-muted mb-4">Find useful items from students around you. Books, electronics, hostel essentials — all at student prices.</p>
+        <form action="/listings" method="GET" class="d-flex gap-2 mb-4 hero-search">
+          <div class="input-group input-group-lg shadow-sm">
+            <span class="input-group-text bg-white border-end-0"><i class="bi bi-search text-muted"></i></span>
+            <input type="text" name="search" class="form-control border-start-0 ps-0" placeholder="Search books, laptops, calculators...">
+            <button type="submit" class="btn btn-primary px-4">Search</button>
+          </div>
+        </form>
+        <div class="hero-cta mt-3">
+          <a href="/listings" class="btn btn-primary btn-lg me-2 px-4">
+            <i class="bi bi-grid me-2"></i>Browse Marketplace
+          </a>
+          <% if (!user) { %>
+            <a href="/signup" class="btn btn-outline-secondary btn-lg px-4">Get Started Free</a>
+          <% } else { %>
+            <a href="/listings/new" class="btn btn-success btn-lg px-4">
+              <i class="bi bi-plus-lg me-2"></i>Post a Listing
+            </a>
+          <% } %>
+        </div>
+      </div>
+      <div class="col-lg-6 d-none d-lg-block text-center">
+        <div class="hero-illustration p-4">
+          <i class="bi bi-shop-window" style="font-size:9rem;color:#4361ee;opacity:0.15;"></i>
+          <div class="hero-badges">
+            <div class="hero-badge"><i class="bi bi-book text-primary me-2"></i>Books</div>
+            <div class="hero-badge"><i class="bi bi-laptop text-success me-2"></i>Electronics</div>
+            <div class="hero-badge"><i class="bi bi-calculator text-warning me-2"></i>Calculators</div>
+            <div class="hero-badge"><i class="bi bi-bicycle text-info me-2"></i>Cycles</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CATEGORIES -->
+<section class="py-5 bg-light">
+  <div class="container">
+    <h2 class="fw-bold text-center mb-2">Browse by Category</h2>
+    <p class="text-center text-muted mb-5">Find exactly what you need</p>
+    <div class="row g-3 justify-content-center">
+      <% [
+        { name: "Books", icon: "bi-book", color: "primary" },
+        { name: "Electronics", icon: "bi-laptop", color: "success" },
+        { name: "Calculators", icon: "bi-calculator", color: "warning" },
+        { name: "Hostel", icon: "bi-house", color: "info" },
+        { name: "Cycles", icon: "bi-bicycle", color: "danger" },
+        { name: "Accessories", icon: "bi-bag", color: "secondary" },
+        { name: "Lab Equipment", icon: "bi-flask", color: "primary" },
+        { name: "Others", icon: "bi-grid", color: "dark" },
+      ].forEach(cat => { %>
+        <div class="col-6 col-sm-4 col-md-3 col-lg-auto">
+          <a href="/listings?category=<%= cat.name %>" class="category-card text-decoration-none">
+            <div class="card border-0 shadow-sm text-center p-3 h-100 category-item">
+              <% if (cat.name === 'Lab Equipment') { %>
+                <!-- Inline flask SVG for Lab Equipment to guarantee visibility -->
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="mb-2">
+                  <path d="M6 2h12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" opacity="0.15" />
+                  <path d="M9 3v3c0 .828.268 1.618.768 2.263L10 9c.48.614.906 1.22 1.124 1.912.218.692.076 1.518-.333 2.197C10.11 14.85 9 16 9 18.5A2.5 2.5 0 0 0 11.5 21h1A2.5 2.5 0 0 0 15 18.5c0-2.5-1.11-3.65-0.991-4.391-.409-.679-.551-1.505-.333-2.197C13.094 10.22 13.52 9.614 14 9l.232-.737A3.5 3.5 0 0 0 15.232 6V3" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" />
+                </svg>
+              <% } else { %>
+                <i class="bi <%= cat.icon %> fs-2 text-<%= cat.color %> mb-2"></i>
+              <% } %>
+              <div class="fw-semibold small text-dark"><%= cat.name %></div>
+            </div>
+          </a>
+        </div>
+      <% }) %>
+    </div>
+  </div>
+</section>
+
+<!-- RECENT LISTINGS -->
+<section class="py-5">
+  <div class="container">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+      <div>
+        <h2 class="fw-bold mb-0">Recent Listings</h2>
+        <p class="text-muted mb-0">Fresh items added by students</p>
+      </div>
+      <a href="/listings" class="btn btn-outline-primary">View All <i class="bi bi-arrow-right ms-1"></i></a>
+    </div>
+    <% if (recentListings.length === 0) { %>
+      <div class="text-center py-5 text-muted">
+        <i class="bi bi-inbox fs-1 d-block mb-3"></i>
+        No listings yet. <a href="/listings/new">Be the first to sell something!</a>
+      </div>
+    <% } else { %>
+      <div class="row g-4">
+        <% recentListings.forEach(listing => { %>
+          <div class="col-sm-6 col-md-4 col-lg-3">
+            <%- include('partials/listing-card', { listing }) %>
+          </div>
+        <% }) %>
+      </div>
+    <% } %>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section class="py-5 bg-light">
+  <div class="container">
+    <h2 class="fw-bold text-center mb-2">How It Works</h2>
+    <p class="text-muted text-center mb-5">Simple, safe, campus-first</p>
+    <div class="row g-4 text-center">
+      <div class="col-md-3">
+        <div class="how-step">
+          <div class="step-icon bg-primary text-white rounded-circle mx-auto mb-3"><i class="bi bi-search fs-4"></i></div>
+          <h6 class="fw-bold">Browse & Search</h6>
+          <p class="text-muted small">Find items listed by students in your campus community.</p>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="how-step">
+          <div class="step-icon bg-success text-white rounded-circle mx-auto mb-3"><i class="bi bi-chat-dots fs-4"></i></div>
+          <h6 class="fw-bold">Contact Seller</h6>
+          <p class="text-muted small">Send a message to the seller through the platform inquiry system.</p>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="how-step">
+          <div class="step-icon bg-warning text-white rounded-circle mx-auto mb-3"><i class="bi bi-people fs-4"></i></div>
+          <h6 class="fw-bold">Meet on Campus</h6>
+          <p class="text-muted small">Arrange a time and place to inspect the item and complete the exchange.</p>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="how-step">
+          <div class="step-icon bg-info text-white rounded-circle mx-auto mb-3"><i class="bi bi-check-circle fs-4"></i></div>
+          <h6 class="fw-bold">Done!</h6>
+          <p class="text-muted small">Seller marks it sold. Both parties benefit. Simple as that.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<%- include('partials/footer') %>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script src="/js/main.js"></script>
+</body>
+</html>
