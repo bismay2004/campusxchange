@@ -1,7 +1,4 @@
-// middleware/upload.js
-// Multer configuration with Cloudinary support (fallbacks to disk when Cloudinary is not configured)
-// Allows jpg, jpeg, png, webp only. Max 5MB per file.
-
+// Multer upload middleware (Cloudinary when configured, otherwise local disk)
 const multer = require("multer");
 const path = require("path");
 const fs = require("fs");

@@ -34,7 +34,7 @@
   <div class="row g-4">
     <!-- LEFT — IMAGE GALLERY -->
     <div class="col-lg-6">
-      <% const imgs = listing.images && listing.images.length > 0 ? listing.images : ["/images/placeholder.png"]; %>
+      <% const imgs = listing.images && listing.images.length > 0 ? listing.images.map(i => i.replace(/\\/g, '/')) : ["/images/placeholder.png"]; %>
       <div class="mb-3 position-relative">
         <img id="mainImage" src="<%= imgs[0] %>"
              class="img-fluid rounded-4 w-100 main-product-img"

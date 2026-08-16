@@ -3,13 +3,45 @@
    Bootstrap handles layout; this adds personality & polish.
    ============================================================ */
 
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Merriweather:wght@700&display=swap');
 
 /* ─── BASE ───────────────────────────────────────────────── */
 body {
-  font-family: 'Inter', system-ui, -apple-system, sans-serif;
-  color: #1a1a2e;
+  font-family: 'Poppins', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  font-size: 16px;
+  line-height: 1.62;
+  color: #0f1724;
   background-color: #f8f9fa;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Headings use a contrasting serif for professional tone */
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Merriweather', Georgia, 'Times New Roman', serif;
+  color: #0b1220;
+  margin-top: 0;
+  margin-bottom: 0.5rem;
+  line-height: 1.15;
+}
+
+h1.display-4 {
+  font-weight: 700;
+  letter-spacing: -0.4px;
+  font-size: clamp(2rem, 4vw, 2.75rem);
+}
+
+.lead {
+  font-size: 1.05rem;
+  color: #495057;
+  font-weight: 500;
+}
+
+/* Buttons and UI retain the sans-serif for clarity */
+.btn {
+  font-family: inherit;
+  font-weight: 600;
+  letter-spacing: 0.2px;
 }
 
 /* ─── AUTH PAGES ─────────────────────────────────────────── */
@@ -35,8 +67,8 @@ body {
 
 /* ─── HERO ───────────────────────────────────────────────── */
 .hero-section {
-  background: linear-gradient(160deg, #f8f9ff 0%, #eef2ff 60%, #f0f8ff 100%);
-  border-bottom: 1px solid #e8eeff;
+  background: linear-gradient(160deg, #fbfcff 0%, #f6f8ff 60%, #ffffff 100%);
+  border-bottom: 1px solid rgba(15,23,36,0.05);
   overflow: hidden;
 }
 
@@ -78,18 +110,18 @@ body {
   margin-top: -2rem;
 }
 .hero-badge {
-  background: linear-gradient(180deg,#ffffff,#fbfbff);
-  border: 1px solid rgba(67,97,238,0.08);
-  border-radius: 24px;
-  padding: 8px 18px;
-  font-size: 14px;
-  font-weight: 700;
-  color: #1f2a6f;
-  box-shadow: 0 8px 30px rgba(67,97,238,0.06);
+  background: #fff;
+  border: 1px solid rgba(15,23,36,0.06);
+  border-radius: 12px;
+  padding: 6px 14px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #0b1220;
+  box-shadow: 0 6px 18px rgba(11,18,32,0.04);
   transform: translateY(0);
-  transition: transform 250ms cubic-bezier(.2,.9,.3,1), box-shadow 250ms ease;
+  transition: transform 200ms ease, box-shadow 200ms ease;
 }
-.hero-badge:hover { transform: translateY(-6px) scale(1.02); box-shadow: 0 18px 40px rgba(67,97,238,0.12); }
+.hero-badge:hover { transform: translateY(-4px); box-shadow: 0 12px 28px rgba(11,18,32,0.06); }
 
 /* subtle staggered appearance for badges */
 .hero-badges .hero-badge { opacity: 0; transform: translateY(10px); animation: heroFadeUp 600ms ease both; }
@@ -107,6 +139,15 @@ body {
   transition: transform 0.15s ease, box-shadow 0.15s ease;
   cursor: pointer;
   min-width: 100px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.25rem;
+}
+.category-item > svg, .category-item > i {
+  line-height: 1;
+  display: block;
 }
 .category-item:hover {
   transform: translateY(-4px);
@@ -244,21 +285,21 @@ body {
 
 /* modern elevated buttons */
 .btn {
-  border-radius: 12px;
-  padding: 0.6rem 1rem;
-  transition: transform 180ms cubic-bezier(.2,.9,.3,1), box-shadow 180ms ease, opacity 120ms ease;
+  border-radius: 8px;
+  padding: 0.55rem 0.9rem;
+  transition: transform 160ms ease, box-shadow 160ms ease, opacity 120ms ease;
 }
-.btn:active { transform: translateY(1px) scale(0.997); }
+.btn:active { transform: translateY(1px); }
 
 .btn-primary {
-  background: linear-gradient(180deg,#4361ee,#3451d1);
+  background: linear-gradient(180deg,#0b2d6b,#17448a);
   border: none;
   color: #fff;
-  box-shadow: 0 8px 24px rgba(52,81,209,0.18);
+  box-shadow: 0 6px 18px rgba(11,44,107,0.12);
 }
 .btn-primary:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 18px 40px rgba(52,81,209,0.18);
+  transform: translateY(-2px);
+  box-shadow: 0 12px 28px rgba(11,44,107,0.14);
 }
 
 .btn-primary.btn-lg {
