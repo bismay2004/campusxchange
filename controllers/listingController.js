@@ -92,7 +92,14 @@ exports.postNewListing = async (req, res) => {
       return res.redirect("/listings/new");
     }
 
-    const images = req.files ? req.files.map((f) => "/uploads/" + f.filename) : [];
+    const images = req.files ? req.files.map((f) => {
+      // multer-storage-cloudinary exposes path/secure_url/url; disk storage uses filename
+      if (f.path) return f.path;
+      if (f.secure_url) return f.secure_url;
+      if (f.url) return f.url;
+      if (f.filename) return '/uploads/' + f.filename;
+      return '';
+    }).filter(Boolean) : [];
 
     const listing = await Listing.create({
       title: title.trim(),
@@ -166,12 +173,19 @@ exports.putEditListing = async (req, res) => {
     let images = req.listing.images;
     // If new images uploaded, replace old ones and delete old files
     if (req.files && req.files.length > 0) {
-      // Delete old image files from disk
+      // Delete old local image files (cloud-hosted images are not stored locally)
       images.forEach((imgPath) => {
-        const uploadsPath = path.join(__dirname, "../uploads", path.basename(imgPath));
-        if (fs.existsSync(uploadsPath)) fs.unlinkSync(uploadsPath);
+        if (imgPath && imgPath.startsWith('/uploads/')) {
+          const uploadsPath = path.join(__dirname, "../uploads", path.basename(imgPath));
+          if (fs.existsSync(uploadsPath)) fs.unlinkSync(uploadsPath);
+        }
       });
-      images = req.files.map((f) => "/uploads/" + f.filename);
+      images = req.files.map((f) => {
+        if (f.path) return f.path;
+        if (f.secure_url) return f.secure_url;
+        if (f.url) return f.url;
+        return '/uploads/' + f.filename;
+      }).filter(Boolean);
     }
 
     await Listing.findByIdAndUpdate(req.listing._id, {
@@ -199,10 +213,12 @@ exports.deleteListing = async (req, res) => {
   try {
     const listing = req.listing;
 
-    // Delete image files from disk
+    // Delete local image files only (cloud-hosted images are left intact)
     listing.images.forEach((imgPath) => {
-      const uploadsPath = path.join(__dirname, "../uploads", path.basename(imgPath));
-      if (fs.existsSync(uploadsPath)) fs.unlinkSync(uploadsPath);
+      if (imgPath && imgPath.startsWith('/uploads/')) {
+        const uploadsPath = path.join(__dirname, "../uploads", path.basename(imgPath));
+        if (fs.existsSync(uploadsPath)) fs.unlinkSync(uploadsPath);
+      }
     });
 
     // Clean up related data
