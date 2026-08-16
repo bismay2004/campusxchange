@@ -25,6 +25,11 @@ const listingController = require("./controllers/listingController");
 
 const app = express();
 
+// When deployed behind a reverse proxy (Heroku, Vercel, nginx), enable trust proxy
+if (process.env.NODE_ENV === 'production') {
+  app.set('trust proxy', 1);
+}
+
 // ─── Database ──────────────────────────────────────────────
 connectDB();
 

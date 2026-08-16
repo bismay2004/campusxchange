@@ -32,8 +32,12 @@ exports.postSignup = async (req, res) => {
     const user = await User.create({ name, email, password, branch, batch });
     req.login(user, (err) => {
       if (err) { req.flash("error", "Login after signup failed."); return res.redirect("/login"); }
-      req.flash("success", `Welcome to CampusXchange, ${user.name.split(" ")[0]}!`);
-      res.redirect("/dashboard");
+      // Ensure session is saved to the store before redirecting (avoids race on some hosts)
+      req.session.save((saveErr) => {
+        if (saveErr) { return next(saveErr); }
+        req.flash("success", `Welcome to CampusXchange, ${user.name.split(" ")[0]}!`);
+        res.redirect("/dashboard");
+      });
     });
   } catch (err) {
     if (err.code === 11000) {
@@ -59,8 +63,12 @@ exports.postLogin = (req, res, next) => {
     }
     req.login(user, (err) => {
       if (err) return next(err);
-      req.flash("success", `Welcome back, ${user.name.split(" ")[0]}!`);
-      res.redirect("/dashboard");
+      // Save session before redirect to ensure persistence across stores/proxies
+      req.session.save((saveErr) => {
+        if (saveErr) return next(saveErr);
+        req.flash("success", `Welcome back, ${user.name.split(" ")[0]}!`);
+        res.redirect("/dashboard");
+      });
     });
   })(req, res, next);
 };
