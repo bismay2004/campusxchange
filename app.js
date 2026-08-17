@@ -113,5 +113,5 @@ app.use(globalError);
 // ─── Start Server ──────────────────────────────────────────
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
-  console.log(`🚀  CampusXchange running at http://localhost:${PORT}`);
+  console.log(`CampusXchange running at http://localhost:${PORT}`);
 });
