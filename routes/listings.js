@@ -15,7 +15,8 @@ router.post(
   isLoggedIn,
   (req, res, next) => {
     upload.array("images", 4)(req, res, (err) => {
-      if (err) { req.flash("error", err.message); return res.redirect("/listings/new"); }
+      if (err) { console.error('Upload middleware error (create):', err); req.flash("error", err.message); return res.redirect("/listings/new"); }
+      console.log('Upload middleware finished (create). files:', Array.isArray(req.files) ? req.files.length : 0);
       next();
     });
   },
@@ -33,7 +34,8 @@ router.put(
   isOwner,
   (req, res, next) => {
     upload.array("images", 4)(req, res, (err) => {
-      if (err) { req.flash("error", err.message); return res.redirect(`/listings/${req.params.id}/edit`); }
+      if (err) { console.error('Upload middleware error (edit):', err); req.flash("error", err.message); return res.redirect(`/listings/${req.params.id}/edit`); }
+      console.log('Upload middleware finished (edit). files:', Array.isArray(req.files) ? req.files.length : 0);
       next();
     });
   },
