@@ -81,7 +81,6 @@ exports.getNewListing = (req, res) => {
 
 exports.postNewListing = async (req, res) => {
   try {
-    console.log('postNewListing called. received files:', Array.isArray(req.files) ? req.files.map(f => ({ originalname: f.originalname, fieldname: f.fieldname, filename: f.filename || null, path: f.path || null, secure_url: f.secure_url || null })) : []);
     const { title, description, price, category, condition, branch, batch, location } = req.body;
 
     if (!title || !description || price === "" || price === undefined || price === null || !category || !condition) {
@@ -160,7 +159,6 @@ exports.getEditListing = (req, res) => {
 
 exports.putEditListing = async (req, res) => {
   try {
-    console.log('putEditListing called. received files:', Array.isArray(req.files) ? req.files.map(f => ({ originalname: f.originalname, fieldname: f.fieldname, filename: f.filename || null, path: f.path || null, secure_url: f.secure_url || null })) : []);
     const { title, description, price, category, condition, branch, batch, location } = req.body;
 
     if (!title || !description || price === "" || price === undefined || price === null || !category || !condition) {

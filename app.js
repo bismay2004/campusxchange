@@ -21,7 +21,6 @@ const listingRoutes = require("./routes/listings");
 const userRoutes = require("./routes/users");
 const inquiryRoutes = require("./routes/inquiries");
 const reportRoutes = require("./routes/reports");
-const diagnosticsRoutes = require("./routes/diagnostics");
 const listingController = require("./controllers/listingController");
 
 const app = express();
@@ -105,7 +104,6 @@ app.use("/", authRoutes);
 app.use("/listings", listingRoutes);
 app.use("/inquiries", inquiryRoutes);
 app.use("/reports", reportRoutes);
-app.use("/diagnostics", diagnosticsRoutes);
 app.use("/", userRoutes);
 
 // ─── 404 & Error Handlers ──────────────────────────────────
